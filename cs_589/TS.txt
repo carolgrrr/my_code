@@ -1,0 +1,30 @@
+Test#1: Activate 4 5 TurnOff
+Test#2: Activate 4 5 Start PayCredit Approved Regular StartPump PumpGallon PumpGallon StopPump Receipt TurnOff
+Test#3: Activate 4 5 Start PayCredit Reject TurnOff
+Test#4: Activate 4 5 Start PayCredit Reject Start PayCash 10 Super StartPump PumpGallon StopPump NoReceipt Start
+Test#5: Activate 4 5 Start PayCash 10 Cancel TurnOff
+Test#6: Activate 4 5 Start PayCash 10 Cancel Start PayCash 2 Super StartPump StopPump Receipt Start PayCredit Approved Regular StartPump StopPump NoReceipt TurnOff
+Test#7: Activate 4 5 Start PayCredit Approved Cancel TurnOff
+Test#8: Activate 4 5 Start PayCredit Approved Super StartPump PumpGallon StopPump 
+Test#9: Activate 4 5 Start PayCash 10 Regular StartPump StopPump
+Test#10: Activate 10 20 Start PayCash 5 Regular StartPump PumpGallon StopPump
+Test#11: Activate 4 5 Activate 8 8 PayCredit Reject Cancel Approved PayCash 10 Regular Super StartPump PumpGallon StopPump NoReceipt Receipt
+Test#12: Activate 4 5 Start Activate 8 8 Start Reject Cancel Approved PayCash -5 Regular Super StartPump PumpGallon StopPump NoReceipt Receipt TurnOff
+Test#13: Activate 4 5 Start PayCredit Activate 8 8 Start PayCredit Cancel PayCash 10 Regular Super StartPump PumpGallon StopPump NoReceipt Receipt TurnOff
+Test#14: Activate 4 5 Start PayCash 10 Activate 8 8 Start PayCredit Reject Approved PayCash 20 StartPump PumpGallon StopPump NoReceipt Receipt TurnOff
+Test#15: Activate 4 5 Start PayCash 10 Regular Activate 8 8 Start PayCredit Reject Cancel Approved PayCash 20 Regular Super PumpGallon StopPump NoReceipt Receipt TurnOff
+Test#16: Activate 4 5 Start PayCash 10 Regular StartPump Activate 8 8 Start PayCredit Reject Cancel Approved PayCash 20 Regular Super StartPump NoReceipt Receipt TurnOff
+Test#17: Activate 4 5 Start PayCash 10 Regular StartPump StopPump Activate 8 8 Start PayCredit Reject Approved PayCash 20 Regular Super StartPump PumpGallon StopPump TurnOff 
+Test#18: Activate 4 -1 
+Test#19: Activate -1 5
+Test#20: Activate -1 -1
+Test#21: Activate 4 5 Activate 4 -1
+Test#22: Activate 4 5 Activate -1 5
+Test#23: Activate 4 5 Activate -1 -1
+Test#24: Activate 4 5 Start PayCash -1
+Test#25: Activate 4 5 Start PayCash 10 PayCash -1
+Test#26: Activate 4 5 Start PayCash 10 Regular StartPump PumpGallon
+Test#27: Activate 4 5 Start PayCash 2 Regular StartPump PumpGallon
+Test#28: Activate 0 0 Start PayCredit Approved Regular StartPump PumpGallon
+Test#29: Activate 4 5 Start PayCash 6 Regular StartPump PumpGallon PumpGallon
+$$
