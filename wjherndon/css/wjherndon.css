@@ -1,0 +1,54 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  /*text-align: center;*/
+}
+
+.lead {
+  padding-top: 10px;
+}
+
+/*
+.col-md-8 {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+@media (min-width: 992px) {
+  .col-md-4, .col-md-8, {
+    float: left;
+  }
+  .col-md-4 {
+    width: 100%;
+  }
+  .col-md-8 {
+    width: 66.66666667%;
+  }
+ }
+*/
+
+ .slider{
+ margin: 0 auto;
+ width: 625px;
+ height: 345px; 
+ 
+ border: 8px solid #FFFFFF;
+ border-radius:5px;
+ box-shadow: 2px 2px 4px #333333;
+}
+
+
+ul{
+  list-type: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+  padding: 5px;
+}
