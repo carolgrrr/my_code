@@ -23,11 +23,12 @@ result_string = str(result_number)
 url = base_url + result_string
 print_job_ids(base_url)
 
-base_url = 'https://www.volunteermatch.org/search/?aff=&amp;includeOnGoing=true&amp;r=20.0&amp;l=Chicago%2C+IL%2C+USA&amp;o=distanceBand&amp;s='
+base_url = 'https://www.volunteermatch.org/search/?aff=&includeOnGoing=true&r=20.0&l=Chicago%2C+IL%2C+USA&o=recency&s='
 result_string = '11'
 url = base_url + result_string
 
 while(result_number < 1266):
+	print("results: %d" % result_number)
 	print_job_ids(url)
 	result_number += 10
 	result_string = str(result_number)
@@ -35,4 +36,9 @@ while(result_number < 1266):
 
 
 print('all results printed')
+
+# prints job id numbers of all jobs in Chicago (no dupes when sorted by recency)
+# save id numbers in a list
+# go to job page for each id and get job details
+# save details in csv
 
