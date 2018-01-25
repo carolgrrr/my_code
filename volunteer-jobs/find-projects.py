@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 
 import requests
+import pickle
 
 def print_job_ids(url):
 	r = requests.get(url)
@@ -46,7 +47,7 @@ def from_volunteer_match():
 	result_number = 1
 	result_string = str(result_number)
 	url = base_url + result_string
-	print_job_ids(base_url)
+	#print_job_ids(base_url)
 
 	base_url = 'https://www.volunteermatch.org/search/?aff=&includeOnGoing=true&r=20.0&l=Chicago%2C+IL%2C+USA&o=recency&s='
 	#run_print_function(base_url)
@@ -111,7 +112,11 @@ def from_volunteer_match():
 		# class_ = opp_detail_org_name
 		# class_ = uxp_heading (Cause Areas, When, Where)
 
-	print(opportunity_list[0])
+	#for opp in opportunity_list:
+	#	print(opp)
+	pickle.dump( opportunity_list, open( "chicago-30-jobs.p", "wb" ) )
+	print('opportunity_list pickled.')
+	#print(opportunity_list[0])
 
 def from_catch_a_fire():
 	print('this site only has 150 opportunities')
@@ -161,8 +166,8 @@ def from_la_works():
 
 
 def main():
-	#from_volunteer_match()
-	from_la_works()
+	from_volunteer_match()
+	#from_la_works()
 
 
 if __name__ == '__main__':
