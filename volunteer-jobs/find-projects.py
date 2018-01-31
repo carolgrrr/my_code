@@ -162,10 +162,27 @@ def from_catch_a_fire(input_url):
 
 	for opportunity in opportunities:
 		opportunity_url = input_url + opportunity
-		print(opportunity_url)
+		#print(opportunity_url)
+
 	r = requests.get(opportunity_url)
 	data = r.text
 	soup = BeautifulSoup(data, 'html.parser')
+
+	# organization
+	for b in soup.find_all(class_="project-meta-name"):
+		print(b.text)
+
+	# how to tell if job is virtual or at a specific location?
+
+	# duration, location, state
+	for tag in soup.find_all(class_="card-list"):
+		#print(tag)
+		print(tag.li.text)
+		# if text ends in ", USA" then state = 2 letters before the comma
+
+	# category
+	for b in soup.find_all(class_="badge badge-caf-red"):
+		print(b.text)
 	#print(soup)
 	#print(opportunities)
 
