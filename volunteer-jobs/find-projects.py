@@ -143,7 +143,7 @@ def get_opportunity_links(html, opportunity_links):
 
 def from_catch_a_fire(input_url):
 
-	r = requests.get(input_url)
+	r = requests.get(input_url+'/volunteer/')
 	data = r.text
 	soup = BeautifulSoup(data, 'html.parser')
 
@@ -152,20 +152,22 @@ def from_catch_a_fire(input_url):
 	pages = get_page_links(soup)
 
 	for page in pages:
-		page = page[1:]
-		url = input_url + page
+		#page = page[1:]
+		url = input_url + '/volunteer/' + page
 		response = requests.get(url)
 		data = response.text
 		soup = BeautifulSoup(data, 'html.parser')
 		opportunities = get_opportunity_links(soup, opportunities)
 
-	#for opportunity in opportunities:
-	opportunity_url = input_url + next(iter(opportunities))
-	print(opportunity_url)
-	#r = requests.get(opportunity_url)
-	#data = r.text
-	#soup = BeautifulSoup(data, 'html.parser')
+
+	for opportunity in opportunities:
+		opportunity_url = input_url + opportunity
+		print(opportunity_url)
+	r = requests.get(opportunity_url)
+	data = r.text
+	soup = BeautifulSoup(data, 'html.parser')
 	#print(soup)
+	#print(opportunities)
 
 	#print(opportunity)
 
@@ -233,7 +235,7 @@ def from_la_works():
 
 def main():
 	volunteermatch_url = 'https://www.volunteermatch.org/search?l=Chicago%2C+IL%2C+USA'
-	catchafire_url = 'https://www.catchafire.org/volunteer/'
+	catchafire_url = 'https://www.catchafire.org'
 	#from_volunteer_match(volunteermatch_url)
 	from_catch_a_fire(catchafire_url)
 	#from_la_works()
