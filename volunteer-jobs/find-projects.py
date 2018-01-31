@@ -130,8 +130,6 @@ def get_page_links(html):
 				page_links.add(link_string)
 	return page_links
 
-
-
 def from_catch_a_fire(input_url):
 
 	r = requests.get(input_url)
@@ -139,13 +137,13 @@ def from_catch_a_fire(input_url):
 	soup = BeautifulSoup(data, 'html.parser')
 
 	opportunies = set()
-	page_list = get_page_links(html)
+	page_list = get_page_links(soup)
 
 	for item in soup.find_all('a'):
 		link = item.get('href')
 		link_string = str(link)
 		if link_string.startswith('/volunteer/'):
-			print(link_string)
+			#print(link_string)
 			opportunies.add(link_string)
 		#elif link_string.startswith('?/page='):
 		#	print(link_string)
