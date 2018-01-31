@@ -135,7 +135,7 @@ def get_opportunity_links(html, opportunity_links):
 		link = item.get('href')
 		link_string = str(link)
 		if link_string.startswith('/volunteer/'):
-			print(link_string)
+			#print(link_string)
 			opportunity_links.add(link_string)
 
 	return opportunity_links
@@ -152,11 +152,22 @@ def from_catch_a_fire(input_url):
 	pages = get_page_links(soup)
 
 	for page in pages:
+		page = page[1:]
 		url = input_url + page
 		response = requests.get(url)
 		data = response.text
 		soup = BeautifulSoup(data, 'html.parser')
 		opportunities = get_opportunity_links(soup, opportunities)
+
+	#for opportunity in opportunities:
+	opportunity_url = input_url + next(iter(opportunities))
+	print(opportunity_url)
+	#r = requests.get(opportunity_url)
+	#data = r.text
+	#soup = BeautifulSoup(data, 'html.parser')
+	#print(soup)
+
+	#print(opportunity)
 
 
 
