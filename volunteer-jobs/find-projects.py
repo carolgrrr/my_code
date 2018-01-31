@@ -36,14 +36,15 @@ def run_print_function(base_url):
 
 	print('all results printed')
 
-def from_volunteer_match():
+
+def from_volunteer_match(input_url):
 
 	print('searching for volunteer jobs in Chicago')
 
 
 	#url = 'https://www.volunteermatch.org/'
 	# search for jobs in chicago
-	base_url = 'https://www.volunteermatch.org/search?l=Chicago%2C+IL%2C+USA'
+	base_url = input_url
 	result_number = 1
 	result_string = str(result_number)
 	url = base_url + result_string
@@ -118,8 +119,41 @@ def from_volunteer_match():
 	print('opportunity_list pickled.')
 	#print(opportunity_list[0])
 
-def from_catch_a_fire():
-	print('this site only has 150 opportunities')
+def get_page_links(html):
+	page_links = set()
+
+	for item in html.find_all(class_='page-item'):
+		for atag in item.find_all('a'):
+			link = atag.get('href')
+			link_string = str(link)
+			if link_string.startswith('?page='):
+				page_links.add(link_string)
+	return page_links
+
+
+
+def from_catch_a_fire(input_url):
+
+	r = requests.get(input_url)
+	data = r.text
+	soup = BeautifulSoup(data, 'html.parser')
+
+	opportunies = set()
+	page_list = get_page_links(html)
+
+	for item in soup.find_all('a'):
+		link = item.get('href')
+		link_string = str(link)
+		if link_string.startswith('/volunteer/'):
+			print(link_string)
+			opportunies.add(link_string)
+		#elif link_string.startswith('?/page='):
+		#	print(link_string)
+		#	page_list.append(link_string)
+	print ('links found')
+
+	#print(soup)
+
 
 def from_la_works():
 	url = 'https://www.laworks.com/opportunity-search'
@@ -166,7 +200,10 @@ def from_la_works():
 
 
 def main():
-	from_volunteer_match()
+	volunteermatch_url = 'https://www.volunteermatch.org/search?l=Chicago%2C+IL%2C+USA'
+	catchafire_url = 'https://www.catchafire.org/volunteer/'
+	#from_volunteer_match(volunteermatch_url)
+	from_catch_a_fire(catchafire_url)
 	#from_la_works()
 
 
