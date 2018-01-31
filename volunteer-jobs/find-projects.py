@@ -130,24 +130,47 @@ def get_page_links(html):
 				page_links.add(link_string)
 	return page_links
 
+def get_opportunity_links(html, opportunity_links):
+	for item in html.find_all('a'):
+		link = item.get('href')
+		link_string = str(link)
+		if link_string.startswith('/volunteer/'):
+			print(link_string)
+			opportunity_links.add(link_string)
+
+	return opportunity_links
+
+
 def from_catch_a_fire(input_url):
 
 	r = requests.get(input_url)
 	data = r.text
 	soup = BeautifulSoup(data, 'html.parser')
 
-	opportunies = set()
-	page_list = get_page_links(soup)
+	opportunities = set()
+	opportunities = get_opportunity_links(soup, opportunities)
+	pages = get_page_links(soup)
 
-	for item in soup.find_all('a'):
-		link = item.get('href')
-		link_string = str(link)
-		if link_string.startswith('/volunteer/'):
-			#print(link_string)
-			opportunies.add(link_string)
-		#elif link_string.startswith('?/page='):
-		#	print(link_string)
-		#	page_list.append(link_string)
+	for page in pages:
+		url = input_url + page
+		response = requests.get(url)
+		data = response.text
+		soup = BeautifulSoup(data, 'html.parser')
+		opportunities = get_opportunity_links(soup, opportunities)
+
+
+
+
+
+	#for item in soup.find_all('a'):
+	#	link = item.get('href')
+	#	link_string = str(link)
+	#	if link_string.startswith('/volunteer/'):
+	#		#print(link_string)
+	#		opportunies.add(link_string)
+	#	#elif link_string.startswith('?/page='):
+	#	#	print(link_string)
+	#	#	page_list.append(link_string)
 	print ('links found')
 
 	#print(soup)
