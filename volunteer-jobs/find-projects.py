@@ -37,32 +37,64 @@ def run_print_function(base_url):
 	print('all results printed')
 
 
-def from_volunteer_match(input_url):
+def from_volunteer_match(input_url, location, savefile):
 
-	print('searching for volunteer jobs in Chicago')
+	base_url = 'https://www.volunteermatch.org/search/'
+	end_virtual_url = ''
+
+	if (location == 'Chicago'):
+		print('searching for volunteer jobs in Chicago')
+		base_url = input_url + 'Chicago%2C+ILA&o=recency&s='
+	elif (location == 'Brooklyn'):
+		print('searching for volunteer jobs in Brooklyn')
+		base_url = input_url + 'Brooklyn%2C+NY&o=recency&s='
+	elif (location == 'Los Angeles'):
+		print('searching for volunteer jobs in Los Angeles')
+		base_url = input_url + 'Los+Angeles%2C+CA&o=recency&s='
+	elif (location == 'Oakland'):
+		print('searching for volunteer jobs in Oakland')
+		base_url = input_url + 'Oakland%2C+CA&o=recency&s='
+	elif (location == 'Virtual'):
+		print('searching for Virtual volunteer jobs')
+		base_url = 'https://www.volunteermatch.org/search/index.jsp#k=&v=true&s='
+		end_virtual_url = '1&o=distanceBand&l=San+Francisco%2C+CA%2C+USA&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc='
+
+
 
 
 	#url = 'https://www.volunteermatch.org/'
 	# search for jobs in chicago
-	base_url = input_url
+	#base_url = input_url
 	result_number = 1
 	result_string = str(result_number)
-	url = base_url + result_string
+	url = base_url + end_virtual_url
+	#url = base_url + result_string
 	#print_job_ids(base_url)
 
-	base_url = 'https://www.volunteermatch.org/search/?aff=&includeOnGoing=true&r=20.0&l=Chicago%2C+IL%2C+USA&o=recency&s='
+	#virtual_url: https://www.volunteermatch.org/search/index.jsp#k=&v=true&s=1&o=distanceBand&l=1600+N+Walnut+St%2C+Pittsburg%2C+KS+66762%2C+USA&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc=
+
+	#virtual_url: https://www.volunteermatch.org/search/index.jsp#k=&v=true&s=1&o=distanceBand&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc=
+
+	#             https://www.volunteermatch.org/search/index.jsp#k=&v=true&s=1&o=distanceBand&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc=
+	#             https://www.volunteermatch.org/search/index.jsp#k=&v=true&s=11&o=distanceBand&l=San+Francisco%2C+CA%2C+USA&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc=
+	#             https://www.volunteermatch.org/search/index.jsp#k=&v=true&s=21&o=distanceBand&l=San+Francisco%2C+CA%2C+USA&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc=
+
+
+	#base_url = 'https://www.volunteermatch.org/search/?aff=&includeOnGoing=true&r=20.0&l=Chicago%2C+IL%2C+USA&o=recency&s='
 	#run_print_function(base_url)
 
 	id_set = set()
+	id_set = get_job_ids(url, id_set)
+
 	#actual number for all results: 1/15/18
 	#while result_number < 1266:
-	while result_number < 25:
-		full_url = base_url + result_string
+	while result_number < 6832:
+		full_url = base_url + result_string + end_virtual_url
 		id_set = get_job_ids(full_url, id_set)
 		result_number += 10
 		result_string = str(result_number)
 
-	print("there are %d volunteer jobs in Chicago" % len(id_set))
+	print("there are %d volunteer jobs in %s" % (len(id_set), location))
 	opportunity_list = []
 
 	for opportunity in id_set:
@@ -115,7 +147,8 @@ def from_volunteer_match(input_url):
 
 	#for opp in opportunity_list:
 	#	print(opp)
-	pickle.dump( opportunity_list, open( "chicago-30-jobs.p", "wb" ) )
+	# "chicago-30-jobs.p"
+	pickle.dump( opportunity_list, open(savefile, "wb" ) )
 	print('opportunity_list pickled.')
 	#print(opportunity_list[0])
 
@@ -141,7 +174,7 @@ def get_opportunity_links(html, opportunity_links):
 	return opportunity_links
 
 
-def from_catch_a_fire(input_url):
+def from_catch_a_fire(input_url, savefile):
 
 	r = requests.get(input_url+'/volunteer/')
 	data = r.text
@@ -160,34 +193,83 @@ def from_catch_a_fire(input_url):
 		opportunities = get_opportunity_links(soup, opportunities)
 
 
+	opportunity_list = []
+
 	for opportunity in opportunities:
 		opportunity_url = input_url + opportunity
 		#print(opportunity_url)
 
-	r = requests.get(opportunity_url)
-	data = r.text
-	soup = BeautifulSoup(data, 'html.parser')
+		r = requests.get(opportunity_url)
+		data = r.text
+		soup = BeautifulSoup(data, 'html.parser')
 
+		opportunity_list.append(str(soup))
+
+		'''
+		cards = soup.find_all(class_="card-list")
+
+		for card in cards:
+			if len(card) > 0:
+				listitem = card.li.text
+				if listitem is not None:
+					card_string = str(card.li.text)
+					if card_string.startswith('Estimated Time:'):
+						#print(card_string)
+						duration = card_string
+				else:
+					duration = 'NA'
+
+		organization = str(soup.find_all(class_='project-meta-name'))
+		category = str(soup.find_all(class_="badge badge-caf-red"))
+
+		opportunity_string = ""
+		opportunity_string += title
+		opportunity_string += organization
+		opportunity_string += summary
+
+
+		#duration_string = str(cards[0])
+		#if duration_string.startswith('Estimated Time:'):
+		#	print(duration_string)
+		#print(cards[0])
+		#print(len(cards))
+		'''
+
+	pickle.dump( opportunity_list, open(savefile, "wb" ) )
 	# organization
-	for b in soup.find_all(class_="project-meta-name"):
-		print(b.text)
+	#for b in soup.find_all(class_="project-meta-name"):
+	#	print(b.text)
 
 	# how to tell if job is virtual or at a specific location?
 
 	# duration, location, state
+	#cards = soup.find_all(class_="card-list")
+
+
+	"""
 	for tag in soup.find_all(class_="card-list"):
 		#print(tag)
-		print(tag.li.text)
+		#print(tag.li.text)
+		city = str(tag.li.text)
+		print(city)
+		if city.startswith('Estimated Time:'):
+
+		if city.endswith("USA"):
+			state = city[-6:-4]
+			print(state)
+		else:
+			state = 'NA'
+		print(state)
 		# if text ends in ", USA" then state = 2 letters before the comma
 
 	# category
-	for b in soup.find_all(class_="badge badge-caf-red"):
-		print(b.text)
+	#for b in soup.find_all(class_="badge badge-caf-red"):
+	#	print(b.text)
 	#print(soup)
 	#print(opportunities)
 
 	#print(opportunity)
-
+"""
 
 
 
@@ -201,7 +283,7 @@ def from_catch_a_fire(input_url):
 	#	#elif link_string.startswith('?/page='):
 	#	#	print(link_string)
 	#	#	page_list.append(link_string)
-	print ('links found')
+	#print ('links found')
 
 	#print(soup)
 
@@ -248,14 +330,43 @@ def from_la_works():
 
 	print(len(opportunity_html))
 
+def from_sponsorchange(url, savefile):
+	r = requests.get(url)
+	data = r.text
+	soup = BeautifulSoup(data, 'html.parser')
+
+	links = soup.find_all('a')
+
+	for link in links:
+		url = link.get('href')
+		print(link.get('href'))
+
+	#print(soup)
+
+	#pickle.dump(soup, open(savefile, 'wb'))
+	#pickle.dump( opportunity_list, open(savefile, "wb" ) )
+
+
+
 
 
 def main():
 	volunteermatch_url = 'https://www.volunteermatch.org/search?l=Chicago%2C+IL%2C+USA'
 	catchafire_url = 'https://www.catchafire.org'
-	#from_volunteer_match(volunteermatch_url)
-	from_catch_a_fire(catchafire_url)
+	sponsorchange_url = 'http://www.sponsorchange.org/?page_id=144'
+
+	#other options: LA, Oakland, Brooklyn
+	location = 'Chicago'
+
+	volunteermatch_filename = 'chicago-30-jobs.p'
+	#volunteermatch_filename = 'volunteermatch-chicago-jobs.csv'
+	catchafire_filename = 'catchafire-jobs.p'
+	sponsorchange_filename = 'sponsorchange-jobs.p'
+
+	#from_volunteer_match(volunteermatch_url, location, volunteermatch_filename)
+	#from_catch_a_fire(catchafire_url, catchafire_filename)
 	#from_la_works()
+	from_sponsorchange(sponsorchange_url, sponsorchange_filename)
 
 
 if __name__ == '__main__':
