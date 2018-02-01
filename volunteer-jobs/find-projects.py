@@ -1,8 +1,13 @@
-
 from bs4 import BeautifulSoup
 
 import requests
 import pickle
+
+# run time - virtual - 15 min [only 20 results - bug?]
+# run time - oakland - 6 min - get 2K job ids - 23 min total - pickle jobs
+# run time - los angeles - 
+
+
 
 def print_job_ids(url):
 	r = requests.get(url)
@@ -13,13 +18,18 @@ def print_job_ids(url):
 		print(item.get('id'))
 
 def get_job_ids(url, id_set):
+	#print(url)
+	#print(len(id_set))
 	r = requests.get(url)
 	data = r.text
 	soup = BeautifulSoup(data, 'html.parser')
 
 	for item in soup.find_all(class_="searchitem PUBLIC"):
-		id_set.add(item.get('id'))
+		next_id = item.get('id')
+		#print(next_id)
+		id_set.add(next_id)
 
+	#print(len(id_set))
 	return id_set
 
 def run_print_function(base_url):
@@ -67,13 +77,20 @@ def from_volunteer_match(input_url, location, savefile):
 
 	id_set = set()
 	id_set = get_job_ids(url, id_set)
+	#print_job_ids(url)
 
-	#actual number for all virutal results: 1/31/18
+	#actual number for all virutal results: 6832 1/31/18
 	#while result_number < 6832:
-	while result_number < 6832:
+	#actual number for all oakland results: 2032 1/31/18
+	while result_number < 2100:
 		full_url = base_url + result_string + end_virtual_url
+		#print(full_url)
+		#print_job_ids(full_url)
 		id_set = get_job_ids(full_url, id_set)
+		# for local locations
 		result_number += 10
+		# for virtual locations
+		#result_number += 1
 		result_string = str(result_number)
 
 	print("there are %d volunteer jobs in %s" % (len(id_set), location))
@@ -104,6 +121,8 @@ def from_volunteer_match(input_url, location, savefile):
 	pickle.dump( opportunity_list, open(savefile, "wb" ) )
 	print('opportunity_list pickled.')
 
+# passed an html page as beautiful soup
+# returns a set of links to next pages
 def get_page_links(html):
 	page_links = set()
 
@@ -120,7 +139,6 @@ def get_opportunity_links(html, opportunity_links):
 		link = item.get('href')
 		link_string = str(link)
 		if link_string.startswith('/volunteer/'):
-			#print(link_string)
 			opportunity_links.add(link_string)
 
 	return opportunity_links
@@ -223,24 +241,24 @@ def main():
 
 	#other options: LA, Oakland, Brooklyn
 	#location = 'Chicago'
-	#location = 'Los Angeles'
+	location = 'Los Angeles'
 	#location = 'Oakland'
 	#location = 'Brooklyn'
-	location = 'Virtual'
+	#location = 'Virtual'
 
-	volunteermatch_filename = 'volunteermatch-virtual-jobs.p'
+	#volunteermatch_filename = 'volunteermatch-virtual-jobs.p'
 	#volunteermatch_filename = 'volunteermatch-chicago-jobs.p'
-	#volunteermatch_filename = 'volunteermatch-la-jobs.p'
+	volunteermatch_filename = 'volunteermatch-la-jobs.p'
 	#volunteermatch_filename = 'volunteermatch-oakland-jobs.p'
 	#volunteermatch_filename = 'volunteermatch-chicago-jobs.p'
 
 	catchafire_filename = 'catchafire-jobs.p'
 	sponsorchange_filename = 'sponsorchange-jobs.p'
 
-	#from_volunteer_match(volunteermatch_url, location, volunteermatch_filename)
+	from_volunteer_match(volunteermatch_url, location, volunteermatch_filename)
 	#from_catch_a_fire(catchafire_url, catchafire_filename)
 	#from_la_works()
-	from_sponsorchange(sponsorchange_url, sponsorchange_filename)
+	#from_sponsorchange(sponsorchange_url, sponsorchange_filename)
 
 
 if __name__ == '__main__':
