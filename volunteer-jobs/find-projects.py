@@ -5,7 +5,7 @@ import pickle
 
 # run time - virtual - 15 min [only 20 results - bug?]
 # run time - oakland - 6 min - get 2K job ids - 23 min total - pickle jobs
-# run time - los angeles - 
+# run time - los angeles - 20 min
 
 
 
@@ -50,7 +50,7 @@ def run_print_function(base_url):
 def from_volunteer_match(input_url, location, savefile):
 
 	base_url = 'https://www.volunteermatch.org/search/'
-	end_virtual_url = ''
+	#end_virtual_url = ''
 
 	# generate correct search url based on location
 	if (location == 'Chicago'):
@@ -67,23 +67,27 @@ def from_volunteer_match(input_url, location, savefile):
 		base_url = input_url + 'Oakland%2C+CA&o=recency&s='
 	elif (location == 'Virtual'):
 		print('searching for Virtual volunteer jobs')
-		base_url = 'https://www.volunteermatch.org/search/index.jsp#k=&v=true&s='
-		end_virtual_url = '1&o=distanceBand&l=San+Francisco%2C+CA%2C+USA&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc='
+		base_url = 'https://www.volunteermatch.org/search/?aff=&includeOnGoing=true&v=true&o=distanceBand&s='
+		#end_virtual_url = '1&o=distanceBand&l=San+Francisco%2C+CA%2C+USA&r=20&sk=&specialGroupsData.groupSize=&na=&partner=&usafc='
 
 
 	result_number = 1
 	result_string = str(result_number)
-	url = base_url + end_virtual_url
+	#url = base_url + end_virtual_url
 
 	id_set = set()
-	id_set = get_job_ids(url, id_set)
+	#id_set = get_job_ids(url, id_set)
 	#print_job_ids(url)
 
 	#actual number for all virutal results: 6832 1/31/18
 	#while result_number < 6832:
 	#actual number for all oakland results: 2032 1/31/18
-	while result_number < 2100:
-		full_url = base_url + result_string + end_virtual_url
+	#actual number for all la results: 2200 1/31/18
+	#actual number for all chicago results: 1317 2/1/18
+	#actual number for all brooklyn results: 2345 2/1/18
+	while result_number < 2400:
+		full_url = base_url + result_string
+		#full_url = base_url + result_string + end_virtual_url
 		#print(full_url)
 		#print_job_ids(full_url)
 		id_set = get_job_ids(full_url, id_set)
@@ -241,16 +245,16 @@ def main():
 
 	#other options: LA, Oakland, Brooklyn
 	#location = 'Chicago'
-	location = 'Los Angeles'
+	#location = 'Los Angeles'
 	#location = 'Oakland'
-	#location = 'Brooklyn'
+	location = 'Brooklyn'
 	#location = 'Virtual'
 
 	#volunteermatch_filename = 'volunteermatch-virtual-jobs.p'
 	#volunteermatch_filename = 'volunteermatch-chicago-jobs.p'
-	volunteermatch_filename = 'volunteermatch-la-jobs.p'
+	#volunteermatch_filename = 'volunteermatch-la-jobs.p'
 	#volunteermatch_filename = 'volunteermatch-oakland-jobs.p'
-	#volunteermatch_filename = 'volunteermatch-chicago-jobs.p'
+	volunteermatch_filename = 'volunteermatch-brooklyn-jobs.p'
 
 	catchafire_filename = 'catchafire-jobs.p'
 	sponsorchange_filename = 'sponsorchange-jobs.p'
